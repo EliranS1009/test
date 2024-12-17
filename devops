@@ -1,0 +1,8 @@
+aws eks update-kubeconfig --region il-central-1 --name dev-eks --alias dev-il-eks-dev --role-arn arn:aws:iam::119268605376:role/digitalidf-developer-ae8f3ac3-5ee7-4532-bb48-a65e776b1c9f 
+
+
+set AWS_DEFAULT_PROFILE=eliran
+
+k9s 
+
+kubectl port-forward redis-master-0 6379:6379 -n team-mcs
