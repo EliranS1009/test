@@ -1,0 +1,28 @@
+$ApplicationId = ""
+$SecuredPassword = ""
+$tenantID = ""
+
+$SecuredPasswordPassword = ConvertTo-SecureString `
+-String $SecuredPassword -AsPlainText -Force
+
+$ClientSecretCredential = New-Object `
+-TypeName System.Management.Automation.PSCredential `
+-ArgumentList $ApplicationId, $SecuredPasswordPassword
+
+Connect-MgGraph -ClientSecretCredential $ClientSecretCredential -TenantId $tenantID
+
+
+
+﻿$TenantID=""
+$GraphAppId = "00000003-0000-0000-c000-000000000000"
+
+$DisplayNameOfMSI="EnableDevice"
+
+$PermissionName = "Device.ReadWrite.All"
+
+ 
+$MSI = (Get-MgServicePrincipal -Filter "displayName eq '$DisplayNameOfMSI'")
+Start-Sleep -Seconds 10
+$GraphServicePrincipal = Get-MgServicePrincipal -Filter "appId eq '$GraphAppId'"
+$AppRole = $GraphServicePrincipal.AppRoles | Where-Object {$_.Value -eq $PermissionName -and $_.AllowedMemberTypes -contains "Application"}
+New-MgServicePrincipalAppRoleAssignment -ServicePrincipalId $MSI.Id -AppRoleId $AppRole.Id -PrincipalId $MSI.Id -ResourceId $GraphServicePrincipal.Id
