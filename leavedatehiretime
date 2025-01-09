@@ -1,0 +1,22 @@
+$filter = "startswith(UserPrincipalName, 'xc.') or startswith(UserPrincipalName, 'xd.')"
+
+$users = Get-MgUser -All -Filter $filter -Property ID,UserPrincipalName,onPremisesExtensionAttributes | Select-Object ID,UserPrincipalName -ExpandProperty onPremisesExtensionAttributes | select ID, UserPrincipalName,ExtensionAttribute1 
+$employeeTypeArray = @("10","11","12")
+
+foreach($user in $users){
+  $weakUser = $null
+  $weakUser = Get-MgUser -UserId $user.ExtensionAttribute1 -Property "customSecurityAttributes ,employeeType" -errorAction SilentlyContinue
+  $releasedate = $($($($weakUser.CustomSecurityAttributes).AdditionalProperties).CookieData).ReleaseDate
+  $releasedate = Get-Date $releasedate
+  $ServiceType = $($($($weakUser.CustomSecurityAttributes).AdditionalProperties).AADData).EmployeeType
+
+
+  if (!$releasedate -or ($employeeTypeArray -contains $ServiceType) -or !$weakUser) {
+       $today = Get-Date
+        $nextYear =  Get-Date ($today.AddDays(365))
+        Update-MgUser -UserId $user.Id -EmployeeLeaveDateTime $nextYear
+  } else {            
+      Update-MgUser -UserId $user.Id -EmployeeLeaveDateTime $releasedate  
+  }
+    
+}
