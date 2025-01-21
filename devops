@@ -6,3 +6,5 @@ set AWS_DEFAULT_PROFILE=eliran
 k9s 
 
 kubectl port-forward redis-master-0 6379:6379 -n team-mcs
+
+https://apim-gateway.digital.idf.il/internal/preprod/cookie/soldiers/tzs
