@@ -1,0 +1,8 @@
+I have set up an App Registration with the ID [Insert App ID Here] and granted it the offline_access permission under Delegated Permissions. I integrated it into a React-based website that authenticates users via Azure AD, allowing me to receive both refresh and access tokens upon login.
+To maintain session continuity, I utilize the acquireTokenSilent function every minute to request new access and refresh tokens without requiring user interaction.
+For testing purposes, I used a user account with the ID [Insert User ID Here], applying Conditional Access to limit the session duration to one hour. My goal was to verify that the offline_access permission would allow token refresh beyond the session expiration without requiring the user to log in again.
+However, after one hour, the session is terminated, and I am unable to renew the access token, even though the offline_access permission was granted.
+I would greatly appreciate your guidance on this issue. Is there any additional configuration required to ensure that the refresh token continues working beyond the session expiration?
+Thank you for your assistance.
+Best regards,
+
